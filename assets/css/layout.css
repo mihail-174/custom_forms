@@ -214,6 +214,14 @@ h3,
 }
 .button__name {}
 
+.button:disabled,
+.button:disabled:hover,
+.button.disabled,
+.button.disabled:hover {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
 .button-primary {
     background-color: var(--primary-color);
     border: 1px solid var(--primary-color);

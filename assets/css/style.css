@@ -138,16 +138,14 @@ input[type=month] {
     position: relative;
 }
 
-.form__field.is-error .form__input {
+.form .is-error .form__input {
     border-color: var(--color-border-error);
 }
-
-.form__field.is-error .form__input + .form__label::before {
+.form .is-error .checkbox__label::before {
     border-color: var(--color-border-error);
 }
-
-.form__field.is-error .form__label::before {
-    border-color: var(--color-border-error);
+.form .is-error.smart-captcha {
+    border: 1px solid var(--color-border-error);
 }
 
 .form__field.is-focused .form__counter-entered-characters {
@@ -403,6 +401,7 @@ textarea ~ .form__group-field-icons .form__counter-entered-characters {
     flex-direction: column;
     grid-gap: 64px;
 }
+
 
 .checkbox__input {
     display: none;

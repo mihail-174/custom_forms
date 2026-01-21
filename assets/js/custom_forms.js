@@ -1,11 +1,11 @@
 /**
  *
- * Custom Forms 4.1.1
+ * Custom Forms 4.2.0
  * Валидация форм
  *
  * Copyright 2025 Mihail Pridannikov
  *
- * Released on: July's 15, 2025
+ * Released on: January 21, 2026
  *
  */
 
@@ -39,18 +39,83 @@ const CustomForm = function (customSettings) {
     let errors = false;
 
     const DEFAULT_SETTINGS = {
+        setAsteriskOnLabels: true,
         blockedButtonSubmit: true,
         captcha: {
-            key: '6LeE740lAAAAAMpDp4bvjLC9CAxlY6QTo_lFiXOy',
-            classInput: 'token_v3',
+            active: 'yandex',
+            google: {
+                key: '',
+            },
         },
         fields: {
+            default: {
+                messages: {
+                    empty: "Поле обязательно для заполнения",
+                    error: 'Поле заполнено некорректно',
+                }
+            },
             phone: {
                 mask: true
+            },
+            email: {
+                messages: {
+                    characterType: 'Почта может содержать только латинские буквы, цифры, подчёркивание или дефис.',
+                }
+            },
+            login: {
+                min: 3,
+                max: 16,
+                messages: {
+                    length: "Логин должен содержать от 3 до 16 символов.",
+                    characterType: 'Логин может содержать только латинские буквы, цифры, подчёркивание или дефис.',
+                }
             },
             password: {
                 min: 6,
                 max: 10,
+                messages: {
+                    length: "Пароль должен содержать от 6 до 10 символов.",
+                    characterType: 'Пароль должен содержать: \n- заглавные и строчные буквы, \n- цифры, \n- специальные символы (!@#$%^& и др.).',
+                }
+            },
+            passwordConfirm: {
+                messages: {
+                    mismatch: "Введённые пароли не совпадают",
+                    empty: "Повторите ввод пароля",
+                }
+            },
+            inn: {
+                min: 6,
+                max: 10,
+                messages: {
+                    length: "ИНН должен состоять из 10 или 12 символов",
+                    characterType: 'Пароль должен содержать: \n- заглавные и строчные буквы, \n- цифры, \n- специальные символы (!@#$%^& и др.).',
+                }
+            },
+            ogrn: {
+                messages: {
+                    length: "ОГРН должен состоять из 13 символов",
+                }
+            },
+            ogrnip: {
+                messages: {
+                    length: "ОГРНИП должен состоять из 15 символов",
+                }
+            },
+            kpp: {
+                messages: {
+                    length: "КПП должен состоять из 9 символов",
+                }
+            },
+            bik: {
+                messages: {
+                    length: "БИК должен состоять из 9 символов",
+                }
+            },
+            paymentAccount: {
+                messages: {
+                    length: "Расчетный счет должен состоять из 20 символов",
+                }
             },
             comment: {
                 displayNumberCharacterEntered: false,
@@ -81,7 +146,7 @@ const CustomForm = function (customSettings) {
                 const idForm = form.getAttribute('data-form-id');
 
                 // блокируем кнопку отправить если поля не заполнены
-                if (settings.forms[idForm] && settings.forms[idForm].hasOwnProperty('blockingSendButton') ? settings.forms[idForm].blockingSendButton : settings.forms.default.blockingSendButton) {
+                if (settings.forms[idForm] && Object.prototype.hasOwnProperty.call(settings.forms[idForm], 'blockingSendButton') ? settings.forms[idForm].blockingSendButton : settings.forms.default.blockingSendButton) {
                     this.setBlockedButtonSubmit(form);
                 }
 
@@ -94,7 +159,7 @@ const CustomForm = function (customSettings) {
                 // 3. применяем стилизацию для поля "file"
                 // 4. устанавливаем "*" в лейбле поля и в плейсхолдере
                 form.querySelectorAll('.form__field').forEach(field => {
-                    let element = field.querySelector("input");
+                    let element = field.querySelector("input, textarea");
 
                     this.addingCharacterDisplay(field);
                     this.addMasked(element);
@@ -102,13 +167,6 @@ const CustomForm = function (customSettings) {
                     // Счетчик количества введенных символов
                     this.getNumberEnteredCharacters(field, element);
 
-                    // if (element && element.value !== '' && element.getAttribute('type') !== 'checkbox' && element.getAttribute('type') !== 'radio') {
-                    //     if (form.classList.contains('form-with-hidding-label')) {
-                    //         field.querySelector('.form__label').classList.add('is-hidden');
-                    //     } else {
-                    //         field.classList.add('is-focused');
-                    //     }
-                    // }
                     if (element) {
                         element.addEventListener('focus', e => this.handlerFocusOnLabel(e, form, field));
                         element.addEventListener('blur', e => this.handlerBlurOnLabel(e, form, field));
@@ -116,18 +174,30 @@ const CustomForm = function (customSettings) {
                         element.getAttribute('type') === 'file' ? this.applyStylingFileUpload(element) : null;
                     }
 
-                    // устанавливаем "*" в лейбле поля и в плейсхолдере
-                    this.setLabelRequireOnField(field, element);
+                    this.setAsteriskOnLabels(field, element);
                 });
+
             }
         });
+        document.addEventListener('captchaSuccess', function() {
+            FORM.forEach(form => {
+                form.querySelector('.smart-captcha').classList.remove('is-error');
+                errors = false;
+            });
+        });
     }
-    this.setLabelRequireOnField = function (field, element) {
-        // устанавливаем "*" в лейбле поля и в плейсхолдере
-        if (element && element.hasAttribute("data-require") && !this.checkingValueAttributeTypeOnInput(element, 'checkbox')) {
-            field.querySelector('.form__label').innerHTML += '<span class="form__require">*</span>';
-            if (this.checkingStockAttributePlaceholderOnInput(element)) {
-                element.setAttribute('placeholder', element.getAttribute('placeholder') + '*');
+    this.setAsteriskOnLabels = function (field, element) {
+        if (settings.setAsteriskOnLabels) {
+            if (element && element.hasAttribute("data-require")) {
+                const type = element.getAttribute("type");
+                switch (type) {
+                    case 'checkbox':
+                        field.querySelector('.checkbox__label span').innerHTML += '<span class="form__require">*</span>';
+                        break;
+                    default:
+                        field.querySelector('.form__label').innerHTML += '<span class="form__require">*</span>';
+                        break;
+                }
             }
         }
     }
@@ -141,120 +211,92 @@ const CustomForm = function (customSettings) {
         return element.getAttribute('type') === type;
     }
     this.setBlockedButtonSubmit = function (form) {
+        const idForm = form.getAttribute('data-form-id');
         let filled = {};
-        form.querySelector('.form__submit').disabled = true;
+        form.querySelector('.form__submit').disabled = settings.forms[idForm] && Object.prototype.hasOwnProperty.call(settings.forms[idForm], 'blockingSendButton') ? settings.forms[idForm].blockingSendButton : settings.forms.default.blockingSendButton;
         form.querySelectorAll('.form__field').forEach(field => {
-            const element = field.querySelector(".form__input");
-            if (element.hasAttribute("data-require")) {
-                // if (element.getAttribute("data-type") === 'agreement') {
-                //     filled[element.getAttribute("name")] = true;
-                // }
-                element.addEventListener('input', e => this.handlerChangeOnRequireField(e, form, filled));
+            const element = field.querySelector(".form__input, .checkbox__input");
+            if (element && element.hasAttribute("data-require")) {
+                const type = element.getAttribute("type");
+                switch (type) {
+                    case 'checkbox':
+                        element.addEventListener('change', e => this.handlerChangeOnRequireField(e, form, filled));
+                        break;
+                    default:
+                        element.addEventListener('keyup', e => this.handlerChangeOnRequireField(e, form, filled));
+                        break;
+                }
             }
         });
     }
     this.handlerChangeOnRequireField = function (e, form, filled) {
-        // console.clear();
         let element = e.target,
             name = e.target.getAttribute('name'),
             type = e.target.getAttribute('data-type');
         switch (type) {
             case 'phone':
-                if (e.target.value.match(/\d+/g) && (e.target.value.match( /\d+/g ).join('')).length === 11) {
-                    filled[name] = true;
-                } else {
-                    delete filled[name];
-                }
-                // if (e.target.value !== '' && e.target.value !== ' (___) ___-__-__' && e.target.value !== '+ (___) ___-__-__' && e.target.value !== '+7(___)___-__-__') {
-                //     filled[name] = true;
-                // } else if (e.target.value === ' (___) ___-__-__' || e.target.value === '+ (___) ___-__-__' || e.target.value === '+7(___)___-__-__') {
-                //     delete filled[name];
-                // } else {
-                //     delete filled[name];
-                // }
+            case settings.fields.phone.mask:
+                element.value.search(/\_/g) === -1 ? filled[name] = true : delete filled[name];
                 break;
             case 'agreement':
-                if (element.checked) {
-                    filled[name] = true;
-                } else {
-                    delete filled[name];
-                }
+                element.checked ? filled[name] = true : delete filled[name];
                 break;
             default:
-                if (e.target.value) {
-                    filled[name] = true;
-                } else {
-                    delete filled[name];
-                }
+                element.value ? filled[name] = true : delete filled[name];
                 break;
         }
-        if (Object.keys(filled).length === this.getCountRequireField(form)) {
-            form.querySelector('.form__submit').disabled = false;
-        } else {
-            form.querySelector('.form__submit').disabled = true;
-        }
+        form.querySelector('.form__submit').disabled = Object.keys(filled).length !== this.getCountRequireField(form);
     }
     this.getCountRequireField = function (form) {
-        return form.querySelectorAll('.form__input[data-require]').length;
+        return form.querySelectorAll('[data-require]').length;
     }
     this.validateField = function (form, field, element) {
-        // const name = element.getAttribute("name");
-        const type = element.getAttribute("data-type");
-        switch (type) {
+        const dataType = element.getAttribute("data-type");
+        switch (dataType) {
             case 'login':
                 if (!formData.login.length) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Поле заполнено некорректно');
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
                 }
-                if (!/^[a-zA-Z0-9]+$/.test(formData.login)) {
+                if (formData.login.length < settings.fields.login.min || formData.login.length > settings.fields.login.max) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Логин может содержать только буквы на латинице и цифры');
+                    this.addMessageOnError(field, settings.fields.login.messages.length);
                 }
-                if (formData.login.length < 3) {
+                if (!/^[a-zA-Z0-9._-]+$/.test(formData.login)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Логин должен состоять не менее 3 символов');
+                    this.addMessageOnError(field, settings.fields.login.messages.characterType);
                 }
                 break;
             case 'password':
                 if (!formData.password.length) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Поле заполнено некорректно');
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
                 }
-                if (formData.password.length < settings.fields.password.min) {
+                if (formData.password.length < settings.fields.password.min || formData.password.length > settings.fields.password.max) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, `Пароль должен состоять не менее ${settings.fields.password.min} символов`);
+                    this.addMessageOnError(field, settings.fields.password.messages.length);
                 }
-                if (formData.password.length > settings.fields.password.max) {
+                if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':",./<>?]).+$/.test(formData.password)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, `Пароль должен состоять не более ${settings.fields.password.max} символов`);
+                    this.addMessageOnError(field, settings.fields.password.messages.characterType.replace(/\n/g, '<br>'));
                 }
-                if (!/^[a-zA-Z0-9]+$/.test(formData.password)) {
-                    errors = true;
-                    this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Пароль может содержать только буквы на латинице и цифры');
-                }
-                // if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,10}$/.test(formData.password)) {
-                //     errors = true;
-                //     this.addClassOnError(field);
-                //     this.addMessageOnError(field, 'Пароль должен содержать как минимум одну заглавную букву, одну строчную букву и одну цифру');
-                // }
                 break;
             case 'passwordConfirm':
                 if (!formData.passwordConfirm.length) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Повторите пароль');
+                    this.addMessageOnError(field, settings.fields.passwordConfirm.messages.empty);
                 }
                 if (formData.password !== formData.passwordConfirm) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Пароли не совпадают');
+                    this.addMessageOnError(field, settings.fields.passwordConfirm.messages.mismatch);
                 }
                 break;
             case 'phone':
@@ -265,7 +307,7 @@ const CustomForm = function (customSettings) {
                 if ((this.checkingStockAttributeRequireOnInput(element) && phoneTest) || (phoneLength && phoneTest)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле заполнено некорректно");
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
                 }
                 break;
             case 'email':
@@ -275,160 +317,176 @@ const CustomForm = function (customSettings) {
                 const emailTestSymbol = !emailPatternSymbol.test(formData.email);
                 const emailLength = formData.email.length;
 
+                if (this.checkingStockAttributeRequireOnInput(element) && !formData.email.length) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
                 if ((this.checkingStockAttributeRequireOnInput(element) && emailTestSymbol) || (emailLength && emailTestSymbol)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, 'Почта может содержать только буквы на латинице, цифры и символы: дефис и точка');
+                    this.addMessageOnError(field, settings.fields.email.messages.characterType);
                 }
                 if ((this.checkingStockAttributeRequireOnInput(element) && emailTest) || (emailLength && emailTest)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле заполнено некорректно");
+                    this.addMessageOnError(field, settings.fields.default.messages.error);
                 }
                 break;
             case 'inn':
+                if (this.checkingStockAttributeRequireOnInput(element) && !formData.inn.length) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
                 if ((formData.inn.length && formData.inn.length < 10) || this.checkingStockAttributeRequireOnInput(element)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, `ИНН должен состоять из 10 или 12 символов`);
+                    this.addMessageOnError(field, settings.fields.inn.messages.length);
                 }
                 break;
             case 'passportNumber':
                 const passportNumberPattern = /\d{3}\s\d{6}/;
                 const passportNumberTest = !passportNumberPattern.test(formData.passportNumber);
                 const passportNumberLength = formData.passportNumber.length;
+                if (this.checkingStockAttributeRequireOnInput(element) && !formData.passportNumber.length) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
                 if ((this.checkingStockAttributeRequireOnInput(element) && passportNumberTest) || (passportNumberLength && passportNumberTest)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле заполнено некорректно");
+                    this.addMessageOnError(field, settings.fields.default.messages.error);
                 }
                 break;
             case 'passportDivision':
                 const passportDivisionPattern = /^\d{3}\-\d{3}$/;
                 const passportDivisionTest = !passportDivisionPattern.test(formData.passportDivision);
                 const passportDivisionLength = formData.passportDivision.length;
+                if (this.checkingStockAttributeRequireOnInput(element) && !formData.passportDivision.length) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
                 if ((this.checkingStockAttributeRequireOnInput(element) && passportDivisionTest) || (passportDivisionLength && passportDivisionTest)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле заполнено некорректно");
+                    this.addMessageOnError(field, settings.fields.default.messages.error);
                 }
                 break;
             case 'snils':
                 const snilsPattern = /^\d{3}-\d{3}-\d{3} \d{2}$/;
                 const snilsTest = !snilsPattern.test(formData.snils);
                 const snilsLength = formData.snils.length;
+                if (this.checkingStockAttributeRequireOnInput(element) && !snilsLength) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
                 if ((this.checkingStockAttributeRequireOnInput(element) && snilsTest) || (snilsLength && snilsTest)) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле заполнено некорректно");
+                    this.addMessageOnError(field, settings.fields.default.messages.error);
                 }
                 break;
             case 'ogrn':
                 const ogrnPattern = /^[0-9]{13}$/;
                 const ogrnTest = !ogrnPattern.test(formData.ogrn);
                 const ogrnLength = formData.ogrn.length;
-                if ((this.checkingStockAttributeRequireOnInput(element) && ogrnTest && ogrnLength.length < 13) || (ogrnLength && ogrnTest)) {
-                    errors = true;
-                    this.addClassOnError(field);
-                    this.addMessageOnError(field, "ОГРН должен состоять из 13 символов");
-                }
                 if (this.checkingStockAttributeRequireOnInput(element) && !ogrnLength) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле не может быть пустым");
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
+                if ((this.checkingStockAttributeRequireOnInput(element) && ogrnTest && ogrnLength.length < 13) || (ogrnLength && ogrnTest)) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.ogrn.messages.length);
                 }
                 break;
             case 'ogrnip':
                 const ogrnipPattern = /^[0-9]{15}$/;
                 const ogrnipTest = !ogrnipPattern.test(formData.ogrnip);
                 const ogrnipLength = formData.ogrnip.length;
-                if ((this.checkingStockAttributeRequireOnInput(element) && ogrnipTest && ogrnipLength.length < 15) || (ogrnipLength && ogrnipTest)) {
-                    errors = true;
-                    this.addClassOnError(field);
-                    this.addMessageOnError(field, "ОГРНИП должен состоять из 15 символов");
-                }
                 if (this.checkingStockAttributeRequireOnInput(element) && !ogrnipLength) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле не может быть пустым");
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
+                if ((this.checkingStockAttributeRequireOnInput(element) && ogrnipTest && ogrnipLength.length < 15) || (ogrnipLength && ogrnipTest)) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.ogrnip.messages.length);
                 }
                 break;
             case 'kpp':
                 const kppPattern = /^[0-9]{9}$/;
                 const kppTest = !kppPattern.test(formData.kpp);
                 const kppLength = formData.kpp.length;
-                if ((this.checkingStockAttributeRequireOnInput(element) && kppTest && kppLength.length < 9) || (kppLength && kppTest)) {
-                    errors = true;
-                    this.addClassOnError(field);
-                    this.addMessageOnError(field, "КПП должен состоять из 9 символов");
-                }
                 if (this.checkingStockAttributeRequireOnInput(element) && !kppLength) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле не может быть пустым");
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
+                if ((this.checkingStockAttributeRequireOnInput(element) && kppTest && kppLength.length < 9) || (kppLength && kppTest)) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.kpp.messages.length);
                 }
                 break;
             case 'bik':
                 const bikPattern = /^[0-9]{9}$/;
                 const bikTest = !bikPattern.test(formData.bik);
                 const bikLength = formData.bik.length;
-                if ((this.checkingStockAttributeRequireOnInput(element) && bikTest && bikLength.length < 9) || (bikLength && bikTest)) {
-                    errors = true;
-                    this.addClassOnError(field);
-                    this.addMessageOnError(field, "БИК должен состоять из 9 символов");
-                }
                 if (this.checkingStockAttributeRequireOnInput(element) && !bikLength) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле не может быть пустым");
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
+                if ((this.checkingStockAttributeRequireOnInput(element) && bikTest && bikLength.length < 9) || (bikLength && bikTest)) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.bik.messages.length);
                 }
                 break;
             case 'paymentAccount':
                 const paymentAccountPattern = /^(?:[\. ]*\d){20}$/;
                 const paymentAccountTest = !paymentAccountPattern.test(formData.paymentAccount);
                 const paymentAccountLength = formData.paymentAccount.length;
-                if ((this.checkingStockAttributeRequireOnInput(element) && paymentAccountTest && paymentAccountLength.length < 20) || (paymentAccountLength && paymentAccountTest)) {
-                    errors = true;
-                    this.addClassOnError(field);
-                    this.addMessageOnError(field, "Расчетный счет должен состоять из 20 символов");
-                }
                 if (this.checkingStockAttributeRequireOnInput(element) && !paymentAccountLength) {
                     errors = true;
                     this.addClassOnError(field);
-                    this.addMessageOnError(field, "Поле не может быть пустым");
+                    this.addMessageOnError(field, settings.fields.default.messages.empty);
+                }
+                if ((this.checkingStockAttributeRequireOnInput(element) && paymentAccountTest && paymentAccountLength.length < 20) || (paymentAccountLength && paymentAccountTest)) {
+                    errors = true;
+                    this.addClassOnError(field);
+                    this.addMessageOnError(field, settings.fields.paymentAccount.messages.length);
                 }
                 break;
             case 'agreement':
-                if (!element.checked) {
+                if (this.checkingStockAttributeRequireOnInput(element) && !element.checked) {
                     errors = true;
                     this.addClassOnError(field);
                 }
                 break;
             default:
-                if (type) {
-                    if (!formData[type].length && this.checkingStockAttributeRequireOnInput(element)) {
+                if (dataType) {
+                    if (!formData[dataType].length && this.checkingStockAttributeRequireOnInput(element)) {
                         errors = true;
                         this.addClassOnError(field);
-                        this.addMessageOnError(field, "Поле заполнено некорректно");
+                        this.addMessageOnError(field, settings.fields.default.messages.empty);
                     }
                 }
                 break;
         }
     }
-    this.serializeForm = function (form) {
-        formData = {};
-        try {
-            new FormData(form).forEach((value, key) => {
-                formData[key] = value.trim();
-            });
-            // this.fetchToSend();
-        } catch (error) {
-            console.log("Error:", error);
-        }
-    }
     this.validateForm = function (form, e) {
+        e.preventDefault();
         this.serializeForm(form);
         errors = false;
+
         let warningElems = form.querySelectorAll(".form__field.is-error") || true;
         if (warningElems.length) {
             warningElems.forEach(function (warningElem) {
@@ -437,23 +495,51 @@ const CustomForm = function (customSettings) {
         }
         form.querySelectorAll('.form__field').forEach(field => {
             let element = field.querySelector("input, textarea, select");
-            // if (element.hasAttribute("data-require")) {
             this.validateField(form, field, element);
-            // }
         });
-        if (errors) {
-            e.preventDefault();
-        } else {
-            e.preventDefault();
-            // this.sendingFormData(form);
-            if (typeof settings.captcha === "object") {
-                // когда параметр 'captcha' = true, то делаем получение токена ти устанавливаем токен в скрытый инпут
-                e.preventDefault();
-                this.getCaptchaToken(form);
-            } else {
-                form.submit();
+
+        if (typeof settings.captcha === "object" && settings.captcha.active === 'yandex') {
+            if (formData["smart-token"] === '') {
+                errors = true;
+                this.addClassOnError(form.querySelector('.smart-captcha'));
             }
         }
+
+        if (errors) {
+            return;
+        }
+
+        if (typeof settings.captcha === "object" && settings.captcha.active === 'google') {
+            this.getTokenGoogleCaptcha(form);
+        } else {
+            form.submit();
+        }
+
+    }
+    this.serializeForm = function (form) {
+        formData = {};
+        try {
+            new FormData(form).forEach((value, key) => {
+                formData[key] = value.trim();
+            });
+        } catch (error) {
+            console.log("Error:", error);
+        }
+    }
+    this.getTokenGoogleCaptcha = function (form) {
+        grecaptcha.ready(() => {
+            grecaptcha.execute(settings.captcha.key, {
+                action: 'add_form'
+            })
+                .then(token => {
+                    this.setTokenGoogleCaptcha(form, token);
+                });
+        });
+    }
+    this.setTokenGoogleCaptcha = function (form, token) {
+        form.querySelector('input[name="g-recaptcha-response"]').value = token;
+        this.serializeForm(form);
+        this.sendingFormData(form);
     }
     this.handlerOnSubmitForm = function (e, form) {
         this.validateForm(form, e);
@@ -593,21 +679,6 @@ const CustomForm = function (customSettings) {
             width: 'false',
         });
     }
-    this.getCaptchaToken = function (form) {
-        grecaptcha.ready(() => {
-            grecaptcha.execute(settings.captcha.key, {
-                action: 'add_form'
-            })
-                .then(token => {
-                    this.setCaptchaToken(form, token);
-                });
-        });
-    }
-    this.setCaptchaToken = function (form, token) {
-        form.querySelector(`.${settings.captcha.classInput}`).value = token;
-        this.serializeForm(form);
-        this.sendingFormData(form);
-    }
     this.sendingFormData = function (form) {
         const idForm = form.getAttribute('data-form-id');
         const referenceOnObject = settings.forms[idForm] && settings.forms[idForm].hasOwnProperty('ajax') ? idForm : 'default';
@@ -649,8 +720,7 @@ const CustomForm = function (customSettings) {
     this.addingCharacterDisplay = function (field) {
         let element = field.querySelector(".form__input");
         if (element) {
-            let type = element.getAttribute('data-type');
-            if (type && (type === 'password' || type === 'passwordConfirm')) {
+            if (element.getAttribute('data-type') === 'password' || element.getAttribute('data-type') === 'passwordConfirm') {
                 this.addingGroupFieldIcons(field);
                 elemGroupFieldIcon.insertAdjacentHTML('beforeend', `
                     <div class="form__characters-display-icon">
