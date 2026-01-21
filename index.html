@@ -133,7 +133,7 @@
                                             <div class="form__field form__field-name">
                                                 <label class="form__label" for="form-example-field-name">Имя</label>
                                                 <div class="form__input-wrapper">
-                                                    <input class="form__input" id="form-example-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя">
+                                                    <input class="form__input" id="form-example-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя" data-require>
                                                 </div>
                                             </div>
                                             <div class="form__field form__field-phone">
@@ -148,6 +148,88 @@
                                                 <label class="form__label" for="form-example-field-comment">Сообщение</label>
                                                 <div class="form__input-wrapper">
                                                     <textarea class="form__input" id="form-example-field-comment" name="comment" data-type="comment" placeholder="Сообщение"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-ask">
+                                                <label class="form__label" for="form-example-field-ask">Ваш вопрос</label>
+                                                <div class="form__input-wrapper">
+                                                    <textarea class="form__input" id="form-example-field-ask" name="ask" data-type="ask" placeholder="Ваш вопрос"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-position">
+                                                <label class="form__label" for="form-example-field-position">Должность</label>
+                                                <input class="form__input" id="form-example-field-position" type="text" name="position" data-type="position" value="" placeholder="Должность">
+                                            </div>
+                                            <div class="form__field form__field-company-name">
+                                                <label class="form__label" for="form-example-field-company-name">Компания</label>
+                                                <input class="form__input" id="form-example-field-company-name" type="text" name="company-name" data-type="company-name" value="" placeholder="Компания">
+                                            </div>
+                                            <div class="form__field form__field-inn">
+                                                <label class="form__label" for="form-example-field-inn">Инн</label>
+                                                <input class="form__input" id="form-example-field-inn" type="text" name="inn" data-type="inn" value="" placeholder="Инн">
+                                            </div>
+                                            <div class="form__field form__field-passport-number">
+                                                <label class="form__label" for="form-example-field-passportNumber">Серия, номер паспорта</label>
+                                                <input class="form__input" id="form-example-field-passportNumber" type="text" name="passportNumber" data-type="passportNumber" value="" placeholder="Серия, номер паспорта">
+                                            </div>
+                                            <div class="form__field form__field-passport-division">
+                                                <label class="form__label" for="form-example-field-passport-division">Код подразделения</label>
+                                                <input class="form__input" id="form-example-field-passport-division" type="text" name="passportDivision" data-type="passportDivision" value="" placeholder="Код подразделения">
+                                            </div>
+                                            <div class="form__field form__field-snils">
+                                                <label class="form__label" for="form-example-field-snils">Cнилс</label>
+                                                <input class="form__input" id="form-example-field-snils" type="text" name="snils" data-type="snils" value="" placeholder="Cнилс">
+                                            </div>
+                                            <div class="form__field form__field-ogrn">
+                                                <label class="form__label" for="form-example-field-ogrn">ОГРН</label>
+                                                <input class="form__input" id="form-example-field-ogrn" type="text" name="ogrn" data-type="ogrn" value="" placeholder="ОГРН">
+                                            </div>
+                                            <div class="form__field form__field-ogrnip">
+                                                <label class="form__label" for="form-example-field-ogrnip">ОГРНИП</label>
+                                                <input class="form__input" id="form-example-field-ogrnip" type="text" name="ogrnip" data-type="ogrnip" value="" placeholder="ОГРНИП">
+                                            </div>
+                                            <div class="form__field form__field-kpp">
+                                                <label class="form__label" for="form-example-field-kpp">КПП</label>
+                                                <input class="form__input" id="form-example-field-kpp" type="text" name="kpp" data-type="kpp" value="" placeholder="КПП">
+                                            </div>
+                                            <div class="form__field form__field-bik">
+                                                <label class="form__label" for="form-example-field-bik">БИК</label>
+                                                <input class="form__input" id="form-example-field-bik" type="text" name="bik" data-type="bik" value="" placeholder="БИК">
+                                            </div>
+                                            <div class="form__field form__field-payment-account">
+                                                <label class="form__label" for="form-example-field-payment-account">Расчетный счет</label>
+                                                <input class="form__input" id="form-example-field-payment-account" type="text" name="paymentAccount" data-type="paymentAccount" value="" placeholder="Расчетный счет">
+                                            </div>
+                                            <div class="form__field form__field-individual-and-legal-entity-selection">
+                                                <div class="form__input-wrapper">
+                                                    <div class="radio radio_type_default radio_theme_default">
+                                                        <input class="form__input radio__input" id="form-example-field-individual" type="radio" name="individual-and-legal-entity-selection">
+                                                        <label class="form__label radio__label" for="form-example-field-individual">Физическое лицо</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form__input-wrapper">
+                                                    <div class="radio radio_type_default radio_theme_default">
+                                                        <input class="radio__input" id="form-example-field-legal" type="radio" name="individual-and-legal-entity-selection">
+                                                        <label class="radio__label" for="form-example-field-legal">Юридическое лицо</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-agreement-privacy-policy">
+                                                <div class="checkbox checkbox_type_default checkbox_theme_default">
+                                                    <input class="checkbox__input" id="form-example-field-agreement-privacy-policy" type="checkbox" name="agreement-privacy-policy" data-type="agreement" data-require>
+                                                    <label class="checkbox__label" for="form-example-field-agreement-privacy-policy"><span>Согласен(сна) с условиями <a href="/" target="_blank">политики конфиденциальности</a>.</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-agreement-personal-data">
+                                                <div class="checkbox checkbox_type_default checkbox_theme_default">
+                                                    <input class="checkbox__input" id="form-example-field-agreement-personal-data" type="checkbox" name="agreement-personal-data" data-type="agreement" data-require>
+                                                    <label class="checkbox__label" for="form-example-field-agreement-personal-data"><span>Согласен(сна) на <a href="/" target="_blank">обработку персональных данных</a></span></label>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-mailing-consent">
+                                                <div class="checkbox checkbox_type_default checkbox_theme_default">
+                                                    <input class="checkbox__input" id="form-example-field-mailing-consent" type="checkbox" name="mailing-consent" data-type="agreement" data-require>
+                                                    <label class="checkbox__label" for="form-example-field-mailing-consent"><span>Согласен(сна) на рассылку</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -229,8 +311,10 @@
                                                 </div>
                                             </div>
                                             <div class="form__field form__checkbox form__field-remember-me">
-                                                <input class="form__input" id="form-login-field-remember-me" type="checkbox" name="remember-me" data-require>
-                                                <label class="form__label" for="form-login-field-remember-me"><span>Запомнить меня</span></label>
+                                                <div class="checkbox checkbox_type_default checkbox_theme_default">
+                                                    <input class="checkbox__input" id="form-login-field-remember-me" type="checkbox" name="remember-me" data-require>
+                                                    <label class="checkbox__label" for="form-login-field-remember-me"><span>Запомнить меня</span></label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form__note"><span>*</span> обязательные для заполнения поля</div>
@@ -303,9 +387,7 @@
 
 
 <script>
-    new Form({
-        blockedButtonSubmit: false
-    });
+    new CustomForm();
 </script>
 
 </body>

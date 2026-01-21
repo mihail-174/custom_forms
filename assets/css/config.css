@@ -14,7 +14,7 @@
     --color-text-error: red;
     --color-border-error: red;
     --color-border-hover: gray;
-    --color-border-focus: #9d2ee7;
+    --color-border-focus: var(--primary-color);
     --color-border-active: #cccccc;
 
     --gap-h1: 48px 0 24px;
