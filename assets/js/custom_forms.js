@@ -1,11 +1,11 @@
 /**
  *
- * Custom Forms 4.1.0
+ * Custom Forms 4.1.1
  * Валидация форм
  *
  * Copyright 2025 Mihail Pridannikov
  *
- * Released on: February 6, 2025
+ * Released on: July's 15, 2025
  *
  */
 
@@ -50,7 +50,7 @@ const CustomForm = function (customSettings) {
             },
             password: {
                 min: 6,
-                max: 10
+                max: 10,
             },
             comment: {
                 displayNumberCharacterEntered: false,
@@ -94,37 +94,37 @@ const CustomForm = function (customSettings) {
                 // 3. применяем стилизацию для поля "file"
                 // 4. устанавливаем "*" в лейбле поля и в плейсхолдере
                 form.querySelectorAll('.form__field').forEach(field => {
-                    let element = field.querySelector(".form__input");
+                    let element = field.querySelector("input");
 
+                    this.addingCharacterDisplay(field);
+                    this.addMasked(element);
+
+                    // Счетчик количества введенных символов
+                    this.getNumberEnteredCharacters(field, element);
+
+                    // if (element && element.value !== '' && element.getAttribute('type') !== 'checkbox' && element.getAttribute('type') !== 'radio') {
+                    //     if (form.classList.contains('form-with-hidding-label')) {
+                    //         field.querySelector('.form__label').classList.add('is-hidden');
+                    //     } else {
+                    //         field.classList.add('is-focused');
+                    //     }
+                    // }
                     if (element) {
-                        this.addingCharacterDisplay(field);
-                        this.addMasked(element);
-
-                        // Счетчик количества введенных символов
-                        this.getNumberEnteredCharacters(field, element);
-
-                        if (element && element.value !== '' && element.getAttribute('type') !== 'checkbox' && element.getAttribute('type') !== 'radio') {
-                            if (form.classList.contains('form-with-hidding-label')) {
-                                field.querySelector('.form__label').classList.add('is-hidden');
-                            } else {
-                                field.classList.add('is-focused');
-                            }
-                        }
                         element.addEventListener('focus', e => this.handlerFocusOnLabel(e, form, field));
                         element.addEventListener('blur', e => this.handlerBlurOnLabel(e, form, field));
                         element.addEventListener('input', e => this.handlerInputOnInput(e, form, field, element/*, dataType*/));
                         element.getAttribute('type') === 'file' ? this.applyStylingFileUpload(element) : null;
-
-                        // устанавливаем "*" в лейбле поля и в плейсхолдере
-                        this.setLabelRequireOnField(field, element);
                     }
+
+                    // устанавливаем "*" в лейбле поля и в плейсхолдере
+                    this.setLabelRequireOnField(field, element);
                 });
             }
         });
     }
     this.setLabelRequireOnField = function (field, element) {
         // устанавливаем "*" в лейбле поля и в плейсхолдере
-        if (element.hasAttribute("data-require") && !this.checkingValueAttributeTypeOnInput(element, 'checkbox')) {
+        if (element && element.hasAttribute("data-require") && !this.checkingValueAttributeTypeOnInput(element, 'checkbox')) {
             field.querySelector('.form__label').innerHTML += '<span class="form__require">*</span>';
             if (this.checkingStockAttributePlaceholderOnInput(element)) {
                 element.setAttribute('placeholder', element.getAttribute('placeholder') + '*');
@@ -475,93 +475,94 @@ const CustomForm = function (customSettings) {
         }
     }
     this.addMasked = function (element) {
-        let type = element && element.getAttribute('data-type');
-        switch (type) {
-            case "passportNumber":
-                new IMask(element, {
-                    mask: '0000 000000',
-                    lazy: true,
-                });
-                break;
-            case "passportDivision":
-                new IMask(element, {
-                    mask: '000-000',
-                    lazy: true,
-                });
-                break;
-            case "inn":
-                new IMask(element, {
-                    mask: '000000000000',
-                    regex: '^\d{10}|\d{12}$',
-                    lazy: true,
-                });
-                break;
-            case "snils":
-                new IMask(element, {
-                    mask: '000-000-000 00',
-                    lazy: true,
-                });
-                break;
-            case "ogrn":
-                new IMask(element, {
-                    mask: '0000000000000',
-                    lazy: true,
-                });
-                break;
-            case "ogrnip":
-                new IMask(element, {
-                    mask: '000000000000000',
-                    lazy: true,
-                });
-                break;
-            case "kpp":
-                new IMask(element, {
-                    mask: '000000000',
-                    lazy: true,
-                });
-                break;
-            case "bik":
-                new IMask(element, {
-                    mask: '000000000',
-                    lazy: true,
-                });
-                break;
-            case "paymentAccount":
-                new IMask(element, {
-                    mask: '00000 000 0 0000 0000000',
-                    lazy: true,
-                });
-                break;
-            case "phone":
-                if (settings.fields.phone.mask) {
+        if (element) {
+            switch (element.getAttribute('data-type')) {
+                case "passportNumber":
                     new IMask(element, {
-                        mask: "+{7} (000) 000-00-00",
-                        lazy: false,
+                        mask: '0000 000000',
+                        lazy: true,
                     });
-                    // new IMask(element, {
-                    //     mask: [
-                    //         {
-                    //             mask: '+{0} (000) 000-00-00',
-                    //             startsWith: '7',
-                    //             lazy: false,
-                    //             country: 'Russia'
-                    //         },
-                    //         {
-                    //             mask: '{0} (000) 000-00-00',
-                    //             startsWith: '8',
-                    //             lazy: false,
-                    //             country: 'Russia'
-                    //         },
-                    //     ],
-                    //     dispatch: (appended, dynamicMasked) => {
-                    //         const number = (dynamicMasked.value + appended).replace(/\D/g, '');
-                    //         return dynamicMasked.compiledMasks.find(m => number.indexOf(m.startsWith) === 0);
-                    //     }
-                    // })
-                }
-                break;
-            default:
-                break;
+                    break;
+                case "passportDivision":
+                    new IMask(element, {
+                        mask: '000-000',
+                        lazy: true,
+                    });
+                    break;
+                case "inn":
+                    new IMask(element, {
+                        mask: '000000000000',
+                        regex: '^\d{10}|\d{12}$',
+                        lazy: true,
+                    });
+                    break;
+                case "snils":
+                    new IMask(element, {
+                        mask: '000-000-000 00',
+                        lazy: true,
+                    });
+                    break;
+                case "ogrn":
+                    new IMask(element, {
+                        mask: '0000000000000',
+                        lazy: true,
+                    });
+                    break;
+                case "ogrnip":
+                    new IMask(element, {
+                        mask: '000000000000000',
+                        lazy: true,
+                    });
+                    break;
+                case "kpp":
+                    new IMask(element, {
+                        mask: '000000000',
+                        lazy: true,
+                    });
+                    break;
+                case "bik":
+                    new IMask(element, {
+                        mask: '000000000',
+                        lazy: true,
+                    });
+                    break;
+                case "paymentAccount":
+                    new IMask(element, {
+                        mask: '00000 000 0 0000 0000000',
+                        lazy: true,
+                    });
+                    break;
+                case "phone":
+                    if (settings.fields.phone.mask) {
+                        new IMask(element, {
+                            mask: "+{7} (000) 000-00-00",
+                            lazy: false,
+                        });
+                        // new IMask(element, {
+                        //     mask: [
+                        //         {
+                        //             mask: '+{0} (000) 000-00-00',
+                        //             startsWith: '7',
+                        //             lazy: false,
+                        //             country: 'Russia'
+                        //         },
+                        //         {
+                        //             mask: '{0} (000) 000-00-00',
+                        //             startsWith: '8',
+                        //             lazy: false,
+                        //             country: 'Russia'
+                        //         },
+                        //     ],
+                        //     dispatch: (appended, dynamicMasked) => {
+                        //         const number = (dynamicMasked.value + appended).replace(/\D/g, '');
+                        //         return dynamicMasked.compiledMasks.find(m => number.indexOf(m.startsWith) === 0);
+                        //     }
+                        // })
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
     this.handlerFocusOnLabel = function (e, form, field) {
@@ -647,15 +648,17 @@ const CustomForm = function (customSettings) {
     // Иконка показать/скрыть введенные символы
     this.addingCharacterDisplay = function (field) {
         let element = field.querySelector(".form__input");
-        let type = element && element.getAttribute('data-type');
-        if (type === 'password' || type === 'passwordConfirm') {
-            this.addingGroupFieldIcons(field);
-            elemGroupFieldIcon.insertAdjacentHTML('beforeend', `
-            <div class="form__characters-display-icon">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 5.00082C6.34357 5.00082 5.00077 6.34362 5.00077 8.00005C5.00077 9.65647 6.34357 10.9993 8 10.9993C9.65642 10.9993 10.9992 9.65647 10.9992 8.00005C10.9992 6.34362 9.65642 5.00082 8 5.00082ZM6.00077 8.00005C6.00077 6.89591 6.89586 6.00082 8 6.00082C9.10414 6.00082 9.99922 6.89591 9.99922 8.00005C9.99922 9.10419 9.10414 9.99927 8 9.99927C6.89586 9.99927 6.00077 9.10419 6.00077 8.00005Z" fill="#222222"/><path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.75C4.59429 2.75 1.68254 4.85238 0.531638 7.81917C0.486509 7.9355 0.486509 8.0645 0.531638 8.18084C1.68254 11.1476 4.59429 13.25 8 13.25C11.4057 13.25 14.3175 11.1476 15.4684 8.18083C15.5135 8.0645 15.5135 7.9355 15.4684 7.81917C14.3175 4.85238 11.4057 2.75 8 2.75ZM8 12.25C5.08376 12.25 2.58765 10.4929 1.53711 8C2.58765 5.50712 5.08376 3.75 8 3.75C10.9162 3.75 13.4123 5.50712 14.4629 8C13.4123 10.4929 10.9162 12.25 8 12.25Z" fill="#222222"/></svg>
-            </div>
-        `);
-            field.querySelector('.form__characters-display-icon').addEventListener('click', e => this.handlerClickOnCharacterDisplay(e, field, element));
+        if (element) {
+            let type = element.getAttribute('data-type');
+            if (type && (type === 'password' || type === 'passwordConfirm')) {
+                this.addingGroupFieldIcons(field);
+                elemGroupFieldIcon.insertAdjacentHTML('beforeend', `
+                    <div class="form__characters-display-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 5.00082C6.34357 5.00082 5.00077 6.34362 5.00077 8.00005C5.00077 9.65647 6.34357 10.9993 8 10.9993C9.65642 10.9993 10.9992 9.65647 10.9992 8.00005C10.9992 6.34362 9.65642 5.00082 8 5.00082ZM6.00077 8.00005C6.00077 6.89591 6.89586 6.00082 8 6.00082C9.10414 6.00082 9.99922 6.89591 9.99922 8.00005C9.99922 9.10419 9.10414 9.99927 8 9.99927C6.89586 9.99927 6.00077 9.10419 6.00077 8.00005Z" fill="#222222"/><path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.75C4.59429 2.75 1.68254 4.85238 0.531638 7.81917C0.486509 7.9355 0.486509 8.0645 0.531638 8.18084C1.68254 11.1476 4.59429 13.25 8 13.25C11.4057 13.25 14.3175 11.1476 15.4684 8.18083C15.5135 8.0645 15.5135 7.9355 15.4684 7.81917C14.3175 4.85238 11.4057 2.75 8 2.75ZM8 12.25C5.08376 12.25 2.58765 10.4929 1.53711 8C2.58765 5.50712 5.08376 3.75 8 3.75C10.9162 3.75 13.4123 5.50712 14.4629 8C13.4123 10.4929 10.9162 12.25 8 12.25Z" fill="#222222"/></svg>
+                    </div>
+                `);
+                field.querySelector('.form__characters-display-icon').addEventListener('click', e => this.handlerClickOnCharacterDisplay(e, field, element));
+            }
         }
     }
     this.handlerClickOnCharacterDisplay = function (e, field, element) {
@@ -683,21 +686,25 @@ const CustomForm = function (customSettings) {
 
     // Счетчик количества введенных символов
     this.getNumberEnteredCharacters = function (field, element) {
-        let dataType = element && element.getAttribute("data-type");
-        let quantity = element && element.value.length;
+        if (element && element.getAttribute("data-type")) {
+            let dataType = element.getAttribute("data-type");
+            let quantity = element.value.length;
 
-        if (settings.fields[dataType] && settings.fields[dataType].displayNumberCharacterEntered && !settings.fields[dataType].displayLimitNumberCharacterEntered) {
-            !field.querySelector('.form__counter-entered-characters') ? this.addingNumberCharactersEntered(field,  quantity) : this.updatingNumberCharacters(field, quantity);
-        }
-        if (settings.fields[dataType] && !settings.fields[dataType].displayNumberCharacterEntered && settings.fields[dataType].displayLimitNumberCharacterEntered) {
-            quantity = settings.fields[dataType].max - quantity;
-            !field.querySelector('.form__counter-entered-characters') ? this.addingRemainingNumberCharacters(field,  quantity) : this.updatingNumberCharacters(field, quantity);
-            quantity < 0 ? this.addClassOnErrorRemainingNumberCharacters(field) : this.removeClassOnErrorRemainingNumberCharacters(field);
+            if (settings.fields[dataType] && settings.fields[dataType].displayNumberCharacterEntered && !settings.fields[dataType].displayLimitNumberCharacterEntered) {
+                !field.querySelector('.form__counter-entered-characters') ? this.addingNumberCharactersEntered(field, quantity) : this.updatingNumberCharacters(field, quantity);
+            }
+            if (settings.fields[dataType] && !settings.fields[dataType].displayNumberCharacterEntered && settings.fields[dataType].displayLimitNumberCharacterEntered) {
+                quantity = settings.fields[dataType].max - quantity;
+                !field.querySelector('.form__counter-entered-characters') ? this.addingRemainingNumberCharacters(field, quantity) : this.updatingNumberCharacters(field, quantity);
+                quantity < 0 ? this.addClassOnErrorRemainingNumberCharacters(field) : this.removeClassOnErrorRemainingNumberCharacters(field);
+            }
         }
     }
     this.addingNumberCharactersEntered = function (field, value) {
         this.addingGroupFieldIcons(field);
-        elemGroupFieldIcon.insertAdjacentHTML('beforeend', `<div class="form__counter-entered-characters">${value}</div>`);
+        if (elemGroupFieldIcon) {
+            elemGroupFieldIcon.insertAdjacentHTML('beforeend', `<div class="form__counter-entered-characters">${value}</div>`);
+        }
     }
     this.updatingNumberCharacters = function (field, value) {
         field.querySelector('.form__counter-entered-characters').textContent = value;
