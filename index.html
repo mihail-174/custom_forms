@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name='format-detection' content='telephone=no' />
+    <meta name='format-detection' content='date=no' />
+    <meta name='format-detection' content='address=no' />
+    <meta name='format-detection' content='email=no' />
+    <title>Demo Custom Forms</title>
+    <link rel="stylesheet" href="assets/css/config.css" />
+    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="assets/vendor/imask/imask.min.js"></script>
+    <script src="assets/js/custom_forms.js"></script>
+</head>
+<body>
+
+<div class="page">
+    <div class="page__header">
+        <div class="header">
+            <div class="header__container container">
+                <div class="logo">
+                    <a href="https://mihail174.ru/docs/developments/custom_forms" class="logo__link">
+                        <span class="logo__icon">
+                            <svg data-v-edcaa7af="" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 320 448"><path data-v-edcaa7af="" fill="#000" d="M203.563 384 240 346.54 120.807 224 240 101.46 203.563 64l-36.404 37.426.034.034L48 224l119.193 122.54-.033.034z"></path></svg>
+                        </span>
+                        <span class="logo__content">
+                            <span class="logo__title">
+                                <span>Custom Forms</span>
+                            </span>
+                            <span class="logo__author">Перейти на сайт</span>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="github">
+                    <a class="github__link" href="https://github.com/mihail-174/custom_map" target="_blank" rel="nofollow noreferrer noopener">
+                        <span class="github__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
+                        </span>
+                        <span class="github__name">GitHub</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="page__center">
+        <div class="page__container container">
+            <div class="page__main">
+                <div class="page__content-wrapper">
+                    <div class="page__title">
+                        <h1>Custom Forms</h1>
+                    </div>
+                    <div class="page__content">
+
+                        <div class="card-examples-detail">
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Дефолтный вид формы</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_default form-example" data-form-id="example">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-name">
+                                                <label class="form__label" for="form-example-field-name">Имя</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-example-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя">
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-comment">
+                                                <label class="form__label" for="form-example-field-comment">Сообщение</label>
+                                                <div class="form__input-wrapper">
+                                                    <textarea class="form__input" id="form-example-field-comment" name="comment" data-type="comment" placeholder="Сообщение"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Форма с лейблами слева</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_labels-left form-example" data-form-id="example">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-name">
+                                                <label class="form__label" for="form-example-field-name">Имя</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-example-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя">
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-comment">
+                                                <label class="form__label" for="form-example-field-comment">Сообщение</label>
+                                                <div class="form__input-wrapper">
+                                                    <textarea class="form__input" id="form-example-field-comment" name="comment" data-type="comment" placeholder="Сообщение"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Форма с скользящими лейблами</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_labels-floating form-example" data-form-id="example">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-name">
+                                                <label class="form__label" for="form-example-field-name">Имя</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-example-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя">
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-comment">
+                                                <label class="form__label" for="form-example-field-comment">Сообщение</label>
+                                                <div class="form__input-wrapper">
+                                                    <textarea class="form__input" id="form-example-field-comment" name="comment" data-type="comment" placeholder="Сообщение"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Набор полей</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_default form-example" data-form-id="example">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-name">
+                                                <label class="form__label" for="form-example-field-name">Имя</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-example-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя">
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-phone">
+                                                <label class="form__label" for="form-example-field-phone">Телефон</label>
+                                                <input class="form__input" id="form-example-field-phone" type="text" name="phone" data-type="phone" value="" placeholder="Телефон" data-require>
+                                            </div>
+                                            <div class="form__field form__field-email">
+                                                <label class="form__label" for="form-example-field-email">Почта</label>
+                                                <input class="form__input" id="form-example-field-email" type="text" name="email" data-type="email" value="" placeholder="Почта" data-require>
+                                            </div>
+                                            <div class="form__field form__field-comment">
+                                                <label class="form__label" for="form-example-field-comment">Сообщение</label>
+                                                <div class="form__input-wrapper">
+                                                    <textarea class="form__input" id="form-example-field-comment" name="comment" data-type="comment" placeholder="Сообщение"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form__note"><span>*</span> обязательные для заполнения поля</div>
+                                        <div class="form__actions">
+                                            <button class="form__submit button button-primary button-m" type="submit">Отправить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Форма обратной связи</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_default form-callback" data-form-id="callback">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-phone">
+                                                <label class="form__label" for="form-callback-field-phone">Телефон</label>
+                                                <input class="form__input" id="form-callback-field-phone" type="text" name="phone" data-type="phone" value="" placeholder="Телефон" data-require>
+                                            </div>
+                                        </div>
+                                        <div class="form__note"><span>*</span> обязательные для заполнения поля</div>
+                                        <div class="form__actions">
+                                            <button class="form__submit button button-primary button-m" type="submit">Отправить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Форма задать вопрос</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_default form-ask-question" data-form-id="ask-question">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-name">
+                                                <label class="form__label" for="form-ask-question-field-name">Имя</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-ask-question-field-name" type="text" name="name" data-type="name" value="" placeholder="Имя">
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-phone">
+                                                <label class="form__label" for="form-ask-question-field-phone">Телефон</label>
+                                                <input class="form__input" id="form-ask-question-field-phone" type="text" name="phone" data-type="phone" value="" placeholder="Телефон" data-require>
+                                            </div>
+                                            <div class="form__field form__field-email">
+                                                <label class="form__label" for="form-ask-question-field-email">Почта</label>
+                                                <input class="form__input" id="form-ask-question-field-email" type="text" name="email" data-type="email" value="" placeholder="Почта" data-require>
+                                            </div>
+                                            <div class="form__field form__field-ask">
+                                                <label class="form__label" for="form-ask-question-field-ask">Ваш вопрос</label>
+                                                <div class="form__input-wrapper">
+                                                    <textarea class="form__input" id="form-ask-question-field-ask" name="ask" data-type="ask" placeholder="Ваш вопрос"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form__actions">
+                                            <button class="form__submit button button-primary button-m" type="submit">Отправить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Форма авторизации</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_default form-login" data-form-id="login">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-login">
+                                                <label class="form__label" for="form-login-field-login">Логин</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-login-field-login" type="text" name="login" data-type="login" value="" placeholder="Логин" data-require>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-password">
+                                                <label class="form__label" for="form-login-field-password">Пароль</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-login-field-password" type="password" name="password" data-type="password" value="" placeholder="Пароль" data-require>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__checkbox form__field-remember-me">
+                                                <input class="form__input" id="form-login-field-remember-me" type="checkbox" name="remember-me" data-require>
+                                                <label class="form__label" for="form-login-field-remember-me"><span>Запомнить меня</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="form__note"><span>*</span> обязательные для заполнения поля</div>
+                                        <div class="form__actions">
+                                            <button class="form__submit button button-primary button-m" type="submit">Войти</button>
+                                            <button class="form__submit button button-primary button-m" type="submit">Зарегистрироваться</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail__section">
+                                <h2 class="card-examples-detail__title">Форма изменения пароля</h2>
+                                <div class="card-examples-detail__content">
+                                    <form class="form form_type_default form-change-password" data-form-id="change-password">
+                                        <input class="token_v3" type="hidden" name="g-recaptcha-response" value="">
+                                        <div class="form__fields">
+                                            <div class="form__field form__field-login">
+                                                <label class="form__label" for="form-change-password-field-login">Логин</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-change-password-field-login" type="text" name="login" data-type="login" value="" placeholder="Логин" data-require>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-password">
+                                                <label class="form__label" for="form-change-password-field-password">Пароль</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-change-password-field-password" type="password" name="password" data-type="password" value="" placeholder="Пароль" data-require>
+                                                </div>
+                                            </div>
+                                            <div class="form__field form__field-password-confirm">
+                                                <label class="form__label" for="form-change-password-field-passwordConfirm">Повторите пароль</label>
+                                                <div class="form__input-wrapper">
+                                                    <input class="form__input" id="form-change-password-field-passwordConfirm" type="password" name="passwordConfirm" data-type="passwordConfirm" value="" placeholder="Повторите пароль" data-require>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form__note"><span>*</span> обязательные для заполнения поля</div>
+                                        <div class="form__actions">
+                                            <button class="form__submit button button-primary button-m" type="submit">Изменить пароль</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-examples-detail">
+                                <div class="card-examples-detail__button-return">
+                                    <a class="button button-secondary button-m" href="https://mihail174.ru/docs/developments/custom_forms">
+                                    <span class="button__name">
+                                        Перейти к настройкам
+                                    </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page__footer">
+        <div class="footer">
+            <div class="footer__container container">
+                <div class="copyright">
+                    <span class="copyright__year">2025</span>
+                    <span class="copyright__author">© Приданников Михаил</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    new Form({
+        blockedButtonSubmit: false
+    });
+</script>
+
+</body>
+</html>
