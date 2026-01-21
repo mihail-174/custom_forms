@@ -16,6 +16,8 @@ const Form = function (settings) {
         },
     }
 
+    let formData = {};
+
     this.init = function () {
         FORM.forEach(form => {
             form.querySelector('[data-type="phone"]') ? this.addMaskPhone(form.querySelector('[data-type="phone"]')) : null;
@@ -38,6 +40,7 @@ const Form = function (settings) {
                 }
                 element.addEventListener('focus', e => this.handlerFocusOnLabel(e, form, field));
                 element.addEventListener('blur', e => this.handlerBlurOnLabel(e, form, field));
+                element.getAttribute('type') === 'file' ? this.applyStylingFileUpload(element) : null;
             });
 
         });
@@ -134,6 +137,39 @@ const Form = function (settings) {
                 break;
         }
     }
+
+    this.serializeForm = function (form) {
+        try {
+            new FormData(form).forEach((value, key) => {
+                formData[key] = value.trim();
+            });
+            this.fetchToSend();
+        } catch (error) {
+            console.log("Error:", error);
+        }
+    }
+    this.fetchToSend = function () {
+        document.querySelector('.popup-sending').classList.add('is-opened');
+        let url = '';
+        let params = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(formData),
+        };
+        const response = fetch(url, params);
+        if (response.ok) {
+            const data = response.json();
+            if (data.success) {
+                // console.log('Заявка успешно отправлена');
+                document.querySelector('.popup-sending').classList.remove('is-opened');
+                document.querySelector('.popup-sending-is-successful').classList.add('is-opened');
+            }
+        } else {
+            console.log('При отправке данных произошла ошибка');
+        }
+    }
     this.validateForm = function (form, e) {
         data.errors = false;
         let warningElems = form.querySelectorAll(".form__field.is-error") || true;
@@ -151,6 +187,7 @@ const Form = function (settings) {
         if (data.errors) {
             e.preventDefault();
         } else {
+            this.serializeForm(form);
             form.submit();
         }
     }
@@ -162,7 +199,9 @@ const Form = function (settings) {
     }
     this.addMessageOnError = function (field, message) {
         if (!field.querySelector('.form__error-message')) {
-            field.insertAdjacentHTML('beforeend', `<div class="form__error-message">${message}</div>`);
+            field.insertAdjacentHTML('beforeend', `
+${message}
+`);
         }
     }
     this.removeMessageOnError = function (field) {
@@ -205,6 +244,13 @@ const Form = function (settings) {
             field.querySelector('.form__label').classList.remove('is-hidden');
             field.classList.remove('is-focused');
         }
+    }
+    this.applyStylingFileUpload = function (element) {
+        $(element).simpleFileInput({
+            placeholder: 'Прикрепить файл',
+            buttonText: '',
+            width: 'false',
+        });
     }
 
     FORM ? this.init() : null;
