@@ -1,11 +1,14 @@
 /**
  *
- * Custom Forms 4.2.0
+ * Custom Forms
  * Валидация форм
  *
- * Copyright 2025 Mihail Pridannikov
- *
- * Released on: January 21, 2026
+ * @author      Mihail Pridannikov
+ * @copyright   2023-2026, Mihail Pridannikov
+ * @license MIT
+ * @version     4.2.0
+ * @release     January 21, 2026
+ * @link        https://github.com/mihail-174/custom_forms
  *
  */
 
