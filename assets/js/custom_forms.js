@@ -1,3 +1,17 @@
+/**
+ *
+ * Custom Forms
+ * Валидация форм
+ *
+ * @author      Mihail Pridannikov
+ * @copyright   2023-2026, Mihail Pridannikov
+ * @license MIT
+ * @version     3.0.0
+ * @release     2025
+ * @link        https://github.com/mihail-174/custom_forms
+ *
+ */
+
 const Form = function (settings) {
     const FORM = document.querySelectorAll('form');
 
